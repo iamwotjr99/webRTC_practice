@@ -4,15 +4,22 @@ export default function Button({
     children,
     disabled = false,
     className = "",
-    variant = "join"
+    variant = "join",
+    size = "md",
 }) {
-    const baseStyle = "px-4 py-2 rounded font-semibold text-white transition";
+    const baseStyle = "rounded font-semibold text-white transition";
+
+    const sizeStyle = {
+        sm: "px-3 py-1 text-sm",
+        md: "px-4 py-2 text-base",
+        lg: "px-5 py-3 text-lg",
+    };
 
     const variantStyle = {
         join: "bg-green-500 hover:bg-green-600",
         create: "bg-blue-500 hover:bg-blue-600",
         danger: "bg-red-500 hover:bg-red-600",
-        outline: "bg-indigo-100 border border-indigo-500 text-indigo-800 hover:bg-indigo-200",
+        outline: "bg-green-400 border border-green-600 hover:bg-green-300",
     };
 
     const disabledStyle = "bg-gray-400 cursor-not-allowed";
@@ -22,12 +29,12 @@ export default function Button({
             type={type}
             onClick={onClick}
             disabled={disabled}
-            className={`${baseStyle}
-                ${disabled 
-                    ? disabledStyle
-                    : variantStyle[variant]}
-                ${className}`
-            }            
+            className={[
+                baseStyle,
+                sizeStyle[size],
+                disabled ? disabledStyle : variantStyle[variant],
+                className
+            ].join(" ")}        
         >
             {children}
         </button>
