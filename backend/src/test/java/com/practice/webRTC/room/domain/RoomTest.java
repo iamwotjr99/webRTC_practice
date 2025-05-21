@@ -3,7 +3,6 @@ package com.practice.webRTC.room.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.practice.webRTC.Room.domain.Room;
 import com.practice.webRTC.global.exception.CustomException;
 import com.practice.webRTC.global.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;

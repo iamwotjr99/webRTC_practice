@@ -1,6 +1,6 @@
-package com.practice.webRTC.Room.infrastructure;
+package com.practice.webRTC.room.infrastructure.redis;
 
-import com.practice.webRTC.Room.infrastructure.redis.RoomParticipantRepository;
+import com.practice.webRTC.room.domain.repository.RoomParticipantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;

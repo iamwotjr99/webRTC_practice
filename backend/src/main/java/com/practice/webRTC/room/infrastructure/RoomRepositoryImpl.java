@@ -1,10 +1,10 @@
-package com.practice.webRTC.Room.infrastructure;
+package com.practice.webRTC.room.infrastructure;
 
-import com.practice.webRTC.Room.domain.Room;
-import com.practice.webRTC.Room.domain.entity.RoomEntity;
-import com.practice.webRTC.Room.domain.repository.RoomRepository;
-import com.practice.webRTC.Room.infrastructure.jpa.JpaRoomRepository;
-import com.practice.webRTC.Room.infrastructure.redis.RoomParticipantRepository;
+import com.practice.webRTC.room.domain.Room;
+import com.practice.webRTC.room.domain.entity.RoomEntity;
+import com.practice.webRTC.room.domain.repository.RoomParticipantRepository;
+import com.practice.webRTC.room.domain.repository.RoomRepository;
+import com.practice.webRTC.room.infrastructure.jpa.JpaRoomRepository;
 import com.practice.webRTC.global.exception.CustomException;
 import com.practice.webRTC.global.exception.ErrorCode;
 import java.util.List;

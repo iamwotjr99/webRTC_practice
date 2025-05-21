@@ -1,7 +1,7 @@
-package com.practice.webRTC.Room.domain;
+package com.practice.webRTC.room.domain;
 
-import com.practice.webRTC.Room.domain.vo.RoomCapacity;
-import com.practice.webRTC.Room.domain.vo.RoomTitle;
+import com.practice.webRTC.room.domain.vo.RoomCapacity;
+import com.practice.webRTC.room.domain.vo.RoomTitle;
 import com.practice.webRTC.global.exception.CustomException;
 import com.practice.webRTC.global.exception.ErrorCode;
 import java.time.LocalDateTime;
@@ -56,10 +56,10 @@ public class Room {
     }
 
     public String getTitleValue() {
-        return this.title.getValue();
+        return this.title.value();
     }
 
     public int getCapacityValue() {
-        return this.capacity.getValue();
+        return this.capacity.value();
     }
 }

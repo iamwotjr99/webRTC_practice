@@ -1,8 +1,8 @@
-package com.practice.webRTC.Room.application;
+package com.practice.webRTC.room.application;
 
-import com.practice.webRTC.Room.application.dto.CreateRoomReqDto;
-import com.practice.webRTC.Room.domain.Room;
-import com.practice.webRTC.Room.domain.repository.RoomRepository;
+import com.practice.webRTC.room.application.dto.CreateRoomReqDto;
+import com.practice.webRTC.room.domain.Room;
+import com.practice.webRTC.room.domain.repository.RoomRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

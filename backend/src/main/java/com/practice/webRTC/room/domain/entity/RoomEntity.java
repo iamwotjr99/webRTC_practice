@@ -1,8 +1,8 @@
-package com.practice.webRTC.Room.domain.entity;
+package com.practice.webRTC.room.domain.entity;
 
-import com.practice.webRTC.Room.domain.Room;
-import com.practice.webRTC.Room.domain.vo.RoomCapacity;
-import com.practice.webRTC.Room.domain.vo.RoomTitle;
+import com.practice.webRTC.room.domain.Room;
+import com.practice.webRTC.room.domain.vo.RoomCapacity;
+import com.practice.webRTC.room.domain.vo.RoomTitle;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

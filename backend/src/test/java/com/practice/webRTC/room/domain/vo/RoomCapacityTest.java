@@ -1,6 +1,5 @@
 package com.practice.webRTC.room.domain.vo;
 
-import com.practice.webRTC.Room.domain.vo.RoomCapacity;
 import com.practice.webRTC.global.exception.CustomException;
 import com.practice.webRTC.global.exception.ErrorCode;
 import org.assertj.core.api.Assertions;
@@ -30,6 +29,6 @@ class RoomCapacityTest {
     @DisplayName("총 인원수가 2보다 크고 6보다 작으면 정상 생성")
     void givenCapacity_whenRightCapacity_thenCreateRoomCapacity() {
         RoomCapacity roomCapacity = new RoomCapacity(4);
-        Assertions.assertThat(roomCapacity.getValue()).isEqualTo(4);
+        Assertions.assertThat(roomCapacity.value()).isEqualTo(4);
     }
 }

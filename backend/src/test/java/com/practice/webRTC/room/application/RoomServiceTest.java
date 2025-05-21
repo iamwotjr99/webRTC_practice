@@ -6,12 +6,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.practice.webRTC.Room.application.RoomService;
-import com.practice.webRTC.Room.application.dto.CreateRoomReqDto;
-import com.practice.webRTC.Room.domain.Room;
-import com.practice.webRTC.Room.domain.repository.RoomRepository;
-import com.practice.webRTC.Room.domain.vo.RoomCapacity;
-import com.practice.webRTC.Room.domain.vo.RoomTitle;
+import com.practice.webRTC.room.application.dto.CreateRoomReqDto;
+import com.practice.webRTC.room.domain.Room;
+import com.practice.webRTC.room.domain.repository.RoomRepository;
+import com.practice.webRTC.room.domain.vo.RoomCapacity;
+import com.practice.webRTC.room.domain.vo.RoomTitle;
 import com.practice.webRTC.global.exception.CustomException;
 import com.practice.webRTC.global.exception.ErrorCode;
 import java.time.LocalDateTime;

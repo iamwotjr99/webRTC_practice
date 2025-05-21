@@ -1,6 +1,6 @@
-package com.practice.webRTC.Room.domain.repository;
+package com.practice.webRTC.room.domain.repository;
 
-import com.practice.webRTC.Room.domain.Room;
+import com.practice.webRTC.room.domain.Room;
 import java.util.List;
 
 public interface RoomRepository {

@@ -1,14 +1,11 @@
-package com.practice.webRTC.Room.domain.vo;
+package com.practice.webRTC.room.domain.vo;
 
 import com.practice.webRTC.global.exception.CustomException;
 import com.practice.webRTC.global.exception.ErrorCode;
-import lombok.Getter;
 
-@Getter
-public class RoomTitle {
-    private String value;
+public record RoomTitle(String value) {
 
-    public RoomTitle(String value) {
+    public RoomTitle {
         if (value == null || value.isEmpty()) {
             throw new CustomException(ErrorCode.ROOM_TITLE_ESSENTIAL);
         }
@@ -21,6 +18,5 @@ public class RoomTitle {
             throw new CustomException(ErrorCode.ROOM_TITLE_TOO_SHORT);
         }
 
-        this.value = value;
     }
 }

@@ -4,6 +4,21 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+    // 토큰 관련
+    TOKEN_INVALID(403, "유효하지 않는 토큰입니다."),
+    TOKEN_IS_NOT_FOUND(404, "존재하지 않는 토큰입니다."),
+
+    // 유저 관련
+    NICKNAME_IS_NULL(400, "닉네임은 필수 입니다."),
+    NICKNAME_TOO_SHORT(400, "닉네임은 2글자 이상이어야 합니다."),
+    NICKNAME_TOO_LONG(400, "닉네임은 8글자 이하이어야 합니다."),
+    NICKNAME_IS_DUPLICATED(400, "이미 존재하는 닉네임 입니다."),
+    PASSWORD_IS_NULL(400, "비밀번호는 필수 입니다."),
+    PASSWORD_TOO_SHORT(400, "비밀번호는 4글자 이상이어야 합니다."),
+    PASSWORD_TOO_LONG(400, "비밀번호는 15글자 이하이어야 합니다."),
+    PASSWORD_IS_INVALID(403, "유효하지 않는 비밀번호 입니다."),
+    USER_IS_NOT_FOUND(404, "존재하지 않는 유저입니다."),
+
     // 방 관련
     ROOM_IS_NOT_FOUND(404, "해당 스터디 방을 찾을 수 없습니다."),
     ROOM_TITLE_ESSENTIAL(400, "스터디 방 제목은 필수입니다."),

@@ -1,6 +1,5 @@
 package com.practice.webRTC.room.domain.vo;
 
-import com.practice.webRTC.Room.domain.vo.RoomTitle;
 import com.practice.webRTC.global.exception.CustomException;
 import com.practice.webRTC.global.exception.ErrorCode;
 import org.assertj.core.api.Assertions;
@@ -39,6 +38,6 @@ class RoomTitleTest {
     @DisplayName("제목이 2글자 이상 20자 이하면 정상 생성")
     void givenTitle_whenRightTitle_thenCreateRoomTitle() {
         RoomTitle roomTitle = new RoomTitle("백엔드 스터디 하실 분~");
-        Assertions.assertThat(roomTitle.getValue()).isEqualTo("백엔드 스터디 하실 분~");
+        Assertions.assertThat(roomTitle.value()).isEqualTo("백엔드 스터디 하실 분~");
     }
 }

@@ -1,14 +1,11 @@
-package com.practice.webRTC.Room.domain.vo;
+package com.practice.webRTC.room.domain.vo;
 
 import com.practice.webRTC.global.exception.CustomException;
 import com.practice.webRTC.global.exception.ErrorCode;
-import lombok.Getter;
 
-@Getter
-public class RoomCapacity {
-    private final int value;
+public record RoomCapacity(int value) {
 
-    public RoomCapacity(int value) {
+    public RoomCapacity {
         if (value < 2) {
             throw new CustomException(ErrorCode.ROOM_CAPACITY_UNDER_MIN);
         }
@@ -17,6 +14,5 @@ public class RoomCapacity {
             throw new CustomException(ErrorCode.ROOM_CAPACITY_OVER_MAX);
         }
 
-        this.value = value;
     }
 }
