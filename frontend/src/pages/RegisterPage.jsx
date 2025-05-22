@@ -1,7 +1,10 @@
 import { Link } from "react-router";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
+import { checkNicknameApi } from "../apis/user";
+import { registerApi } from "../apis/auth";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export default function RegisterPage() {
     const [form, setForm] = useState({
@@ -12,6 +15,8 @@ export default function RegisterPage() {
 
     const [nicknameMsg, setNicknameMsg] = useState("");
     const [nicknameChecked, setNicknameChecked] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,21 +31,26 @@ export default function RegisterPage() {
         }
     };
 
-    const handleNicknameCheck = () => {
+    const handleNicknameCheck = async () => {
         if (!form.nickname.trim()) {
-            setNicknameMsg("닉네임을 입력해주세요")
+            setNicknameMsg("닉네임을 입력해주세요");
+            setNicknameChecked(false);
+            return;
         }
 
-        // 백엔드 통신후 사용 가능한 닉네임이면
-        setNicknameMsg("사용 가능한 닉네임입니다.");
-        setNicknameChecked(true);
-
-        // 이미 사용중인 닉네임이면
-        //setNicknameMsg("이미 사용 중인 닉네임입니다.");
-        //setNicknameChecked(false);
+        try {
+            const res = await checkNicknameApi(form.nickname);
+            if (res.data.success) {
+                setNicknameMsg("사용 가능한 닉네임입니다.");
+                setNicknameChecked(true);
+            }
+        } catch (err) {
+            setNicknameMsg("이미 사용 중인 닉네임입니다.");
+            setNicknameChecked(false);
+        }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!nicknameChecked) {
@@ -49,7 +59,8 @@ export default function RegisterPage() {
         }
 
         if (form.nickname.length < 2 || form.nickname.length > 8) {
-            alert("닉네임은 2글자 이상 8글자 이하로 해주세요.")
+            alert("닉네임은 2글자 이상 8글자 이하로 해주세요.");
+            return;
         }
 
         if (!nicknameChecked) {
@@ -64,9 +75,16 @@ export default function RegisterPage() {
 
         if (form.password.length < 4 || form.password.length > 15) {
             alert("비밀번호는 4글자 이상 15글자 이하로 해주세요.");
+            return;
         }
 
-        console.log("회원가입 요청: ", form);
+        try {
+            await registerApi(form.nickname, form.password);
+            alert("회원가입 성공! 로그인 페이지로 이동합니다.");
+            navigate("/login");
+        } catch (error) {
+            alert("회원가입 실패");
+        }
     }
 
     return (
@@ -76,7 +94,7 @@ export default function RegisterPage() {
                 한 단계 성장하기까지 단 1분! <br />
                 간단하게 가입하고 함께 공부해요.
             </p>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="flex gap-2 ">
                     <Input type="text" name="nickname" value={form.nickname} onChange={handleChange} placeholder="닉네임을 입력해주세요" className="flex-[6]"
                         error={!nicknameChecked && nicknameMsg} success={nicknameChecked && nicknameMsg}/>
@@ -85,7 +103,7 @@ export default function RegisterPage() {
                 <Input type="password" name="password" value={form.password} onChange={handleChange} placeholder="비밀번호를 입력해주세요"/>
                 <Input type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} placeholder="비밀번호를 한번 더 입력해주세요"/>
                 <div className="flex justify-end">
-                    <Button type="submit" variant="join" onClick={handleSubmit}>회원가입</Button>
+                    <Button type="submit" variant="join">회원가입</Button>
                 </div>
             </form>
             
