@@ -32,7 +32,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // 명시적으로 origin 나열
-        config.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:5173"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

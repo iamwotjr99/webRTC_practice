@@ -63,7 +63,7 @@ public class JwtProvider {
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
-                    .decryptWith(key)
+                    .setSigningKey(key)
                     .build()
                     .parseSignedClaims(token);
             return true;
@@ -76,7 +76,7 @@ public class JwtProvider {
     // 토큰에서 userId 추출
     public Long getUserIdFromToken(String token) {
         Claims payload = Jwts.parser()
-                .decryptWith(key)
+                .setSigningKey(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
