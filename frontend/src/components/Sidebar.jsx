@@ -1,13 +1,17 @@
 import { Link } from "react-router";
+import { useSelector } from "react-redux";
 
 export default function Sidebar() {
+    const user = useSelector((state) => state.auth.user);
+    const nickname = user?.nickname;
+
     return (
         <nav className="w-64 h-screen bg-green-800 text-white flex flex-col p-4 fixed left-0 top-0">
             <Link to="/" className="text-xl font-bold mb-6 hover:text-green-300">거북이 달린다</Link>
 
             <div className="mb-4">
                 <p className="text-sm text-green-200">닉네임</p>
-                <p className="font-semibold">재석군</p>
+                <p className="font-semibold">{nickname}</p>
             </div>
 
             <nav className="flex-1">

@@ -1,10 +1,22 @@
-import { useState } from "react"
-import CreateRoomForm from "../components/CreateRoomForm";
-import RoomCard from "../components/RoomCardList";
-import RoomCardList from "../components/RoomCardList";
+import { useEffect } from "react";
+import CreateRoomForm from "../components/roomlist/CreateRoomForm";
+import RoomCardList from "../components/roomlist/RoomCardList";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 
 export default function MainPage() {
+    const navigate = useNavigate();
+    const user = useSelector((state) => state.auth.user);
+    const nickname = user?.nickname;
+
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+            navigate("/login");
+        }
+    }, [])
+    
     const dummyRooms = [
         { id: 1, title: "React 집중 스터디", participants: 3, capacity: 6},
         { id: 2, title: "백엔드 스터디 방", participants: 2, capacity: 4},
@@ -12,8 +24,6 @@ export default function MainPage() {
         { id: 4, title: "토익 스터디 방", participants: 3, capacity: 5},
         { id: 5, title: "심심풀이 땅콩 방", participants: 1, capacity: 2},
     ]
-
-    const nickname = "재석군"
 
     return (
         <div className="space-y-5">

@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import Button from "./common/Button";
 
 export default function RoomCard({ room }) {
     return (
