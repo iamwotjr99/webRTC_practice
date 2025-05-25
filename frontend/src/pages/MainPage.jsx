@@ -1,12 +1,16 @@
-import { useEffect } from "react";
-import CreateRoomForm from "../components/roomlist/CreateRoomForm";
-import RoomCardList from "../components/roomlist/RoomCardList";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { getMyRooms } from "../apis/room";
+
+import CreateRoomForm from "../components/roomlist/CreateRoomForm";
+import RoomCardList from "../components/roomlist/RoomCardList";
 
 
 export default function MainPage() {
     const navigate = useNavigate();
+    const [rooms, setRooms] = useState([]);
+
     const user = useSelector((state) => state.auth.user);
     const nickname = user?.nickname;
 
@@ -14,7 +18,20 @@ export default function MainPage() {
         const token = localStorage.getItem("accessToken");
         if (!token) {
             navigate("/login");
+            return;
         }
+
+        const fetch = async () => {
+            try {
+                const res = await getMyRooms();
+                setRooms(res.data.data);
+                console.log(res.data.data);
+            } catch (err) {
+                console.error("방 조회 실패: ", err);
+            }
+        };
+
+        fetch();
     }, [])
     
     const dummyRooms = [
@@ -34,7 +51,7 @@ export default function MainPage() {
 
             <CreateRoomForm />
 
-            <RoomCardList rooms={dummyRooms} />
+            <RoomCardList rooms={rooms} />
         </div>
     )
 }

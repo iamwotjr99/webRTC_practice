@@ -6,7 +6,7 @@ export default function RoomCardList({ rooms }) {
             <h2 className="text-lg font-semibold mb-4">참여할 수 있는 스터디룸</h2>
             <div className="grid gap-4">
                 {rooms.map((room) => (
-                    <RoomCard key={room.id} room={room} />
+                    <RoomCard key={room.roomId} room={room} />
                 ))}
             </div>
         </section>

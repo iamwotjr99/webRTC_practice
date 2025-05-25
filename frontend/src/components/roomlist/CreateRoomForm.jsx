@@ -1,24 +1,42 @@
 import { useState } from "react"
+import { createRoom } from "../../apis/room";
 import Button from "../common/Button";
 import Input from "../common/Input";
 
 export default function CreateRoomForm() {
     const [roomTitle, setRoomTitle] = useState("");
     const [roomCapacity, setRoomCapacity] = useState("");
+    const [inputErrMsg, setInputErrMsg] = useState("");
+    const [inputErrCheck, setInputErrCheck] = useState(false);
 
-    const handleCreateRoom = (e) => {
+    const handleCreateRoom = async (e) => {
         e.preventDefault();
 
         if (roomTitle.length <= 0) {
-            return alert("스터디방 제목을 입력해주세요.")
+            setInputErrCheck(true);
+            setInputErrMsg("스터디 방 제목을 입력해주세요.");
+            return;
         };
 
         const capacity = Number(roomCapacity);
         if(!capacity || capacity < 2 || capacity > 6) {
-            return alert("인원수는 2명이상 6명 이하로 입력해주세요.");
+            setInputErrCheck(true);
+            setInputErrMsg("인원수는 2명 이상 6명 이하로 입력해주세요.");
+            return;
         }
 
-        alert(`"${roomTitle}"방을 ${capacity}명으로 생성합니다.`)
+        try {
+            setInputErrCheck(false);
+            const res = await createRoom(roomTitle, capacity);
+            const titleRes = res.data.data.titleValue;
+            const capacityRes = res.data.data.capacityValue;
+            alert(`"${titleRes}"방을 ${capacityRes}명으로 생성합니다.`)
+        } catch (err) {
+            setInputErrCheck(true);
+            setInputErrMsg("방 생성 실패");
+            console.error("방 생성 실패: ", err);
+        }
+
         setRoomTitle("");
         setRoomCapacity("");
     }
@@ -33,7 +51,7 @@ export default function CreateRoomForm() {
                     onChange={(e) => setRoomTitle(e.target.value)}
                     placeholder="스터디룸 제목 입력 (예: 같이 리액트 공부해요)"
                     className="flex-1"
-                    // error="문제 발생"
+                    error={inputErrCheck && inputErrMsg}
                 />
 
                 <select 

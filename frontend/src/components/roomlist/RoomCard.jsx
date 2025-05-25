@@ -6,7 +6,7 @@ export default function RoomCard({ room }) {
             <div>
                 <h3 className="font-bold">{room.title}</h3>
                 <p className="text-sm text-gray-500">
-                    {room.participants} / {room.capacity}명 참여중
+                    {room.participant} / {room.capacity}명 참여중
                 </p>
             </div>
             <Link to={`chatroom/${room.id}`}
