@@ -27,7 +27,10 @@ public enum ErrorCode {
     ROOM_CAPACITY_ESSENTIAL(400, "스터디 방 인원수는 필수입니다."),
     ROOM_CAPACITY_OVER_MAX(400, "스터디 방 인원수는 6명 이하여야 합니다."),
     ROOM_CAPACITY_UNDER_MIN(400, "스터디 방 인원수는 2명 이상이어야 합니다."),
-    ROOM_IS_FULL(400, "현재 스터디 방 정원이 가득 찼습니다.");
+    ROOM_IS_FULL(400, "현재 스터디 방 정원이 가득 찼습니다."),
+
+    // 유저-방 관련
+    ROOM_USER_IS_NOT_FOUND(404, "해당 유저와 해당 방에 대한 정보를 찾을 수 없습니다.");
 
     private final int status;
     private final String message;

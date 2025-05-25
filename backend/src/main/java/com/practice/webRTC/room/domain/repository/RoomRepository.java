@@ -9,4 +9,6 @@ public interface RoomRepository {
     Room findById(Long roomId);
 
     List<Room> findAll();
+
+    // Room findByRoomCode(String roomCode);
 }

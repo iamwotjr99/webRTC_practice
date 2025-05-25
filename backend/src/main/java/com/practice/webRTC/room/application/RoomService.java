@@ -2,7 +2,13 @@ package com.practice.webRTC.room.application;
 
 import com.practice.webRTC.room.application.dto.CreateRoomReqDto;
 import com.practice.webRTC.room.domain.Room;
+import com.practice.webRTC.room.domain.RoomUser;
+import com.practice.webRTC.room.domain.repository.RoomParticipantRepository;
 import com.practice.webRTC.room.domain.repository.RoomRepository;
+import com.practice.webRTC.room.domain.repository.RoomUserRepository;
+import com.practice.webRTC.user.domain.User;
+import com.practice.webRTC.user.domain.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,18 +18,56 @@ import org.springframework.stereotype.Service;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    private final RoomUserRepository roomUserRepository;
+    private final RoomParticipantRepository roomParticipantRepository;
 
-    public Room createRoom(CreateRoomReqDto dto) {
-        Room room = Room.createRoom(dto.userId(), dto.title(), dto.capacity());
-        return roomRepository.save(room);
+    // 방생성하고 자동입장? x
+
+    // 방 만들고 해당 유저(방만든 유저)와 해당 방 매핑
+    @Transactional
+    public Room createRoom(Long userId, CreateRoomReqDto dto) {
+        Room room = Room.createRoom(userId, dto.title(), dto.capacity());
+        Room savedRoom = roomRepository.save(room);
+        RoomUser roomUser = RoomUser.join(savedRoom.getUserId(), savedRoom.getId());
+
+        roomUserRepository.save(roomUser);
+
+        return savedRoom;
     }
 
-    public Room getRoom(Long roomId) {
-        return roomRepository.findById(roomId);
+    // 방에 가입
+    @Transactional
+    public void joinRoom(Long userId, Long roomId) {
+        boolean alreadyJoined = roomUserRepository.existByUserIdAndRoomId(userId, roomId);
+        Room room = roomRepository.findById(roomId);
+
+        RoomUser roomUser;
+        if (!alreadyJoined && room.canJoin()) {
+            roomUser = RoomUser.join(userId, roomId);
+            room.addParticipant();
+        } else {
+            roomUser = roomUserRepository.findByUserIdAndRoomId(userId, roomId);
+            roomUser.rejoin();
+        }
+
+        roomRepository.save(room);
+        roomUserRepository.save(roomUser);
     }
 
-    // 유저 도메인 구현 이후, 유저-방 매핑 테이블 구현 후 삭제하고 다른 방목록 조회 함수로 대체 예정
-    public List<Room> getAllRoom() {
-        return roomRepository.findAll();
+    // 내가 속한 방 목록 조회
+    @Transactional
+    public List<Room> getMyRoomList(Long userId) {
+        List<RoomUser> roomUserList = roomUserRepository.findByUserId(userId);
+        return roomUserList.stream()
+                .map((roomUser) -> roomRepository.findById(roomUser.getRoomId())).toList();
+    }
+
+    // 최근에 입장한 방 목록 조회
+    @Transactional
+    public List<Room> getMyRoomListByJoinedAt(Long userId) {
+        List<RoomUser> roomUserList = roomUserRepository.findByUserIdOrderByJoinedAtDesc(
+                userId);
+        return roomUserList.stream()
+                .map((roomUser) -> roomRepository.findById(roomUser.getRoomId())).toList();
     }
 }

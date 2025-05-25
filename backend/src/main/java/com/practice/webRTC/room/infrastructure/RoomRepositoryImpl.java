@@ -49,4 +49,14 @@ public class RoomRepositoryImpl implements RoomRepository {
                 })
                 .toList();
     }
+
+//    @Override
+//    public Room findByRoomCode(String roomCode) {
+//        RoomEntity roomEntity = jpaRoomRepository.findByRoomCode(roomCode)
+//                .orElseThrow(() -> new CustomException(ErrorCode.ROOM_IS_NOT_FOUND));
+//
+//        int participantCount = roomParticipantRepository.getParticipantCount(roomEntity.getId());
+//
+//        return roomEntity.toRoom(participantCount);
+//    }
 }

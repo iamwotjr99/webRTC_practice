@@ -11,14 +11,15 @@ import lombok.Getter;
 @Getter
 @Builder
 public class Room {
-    private final Long id;
+    private Long id;
     private final Long userId;
     private final RoomTitle title;
     private int participant; // 해당 속성은 Redis로 실시간 관리
     private final RoomCapacity capacity;
     private final LocalDateTime createdAt;
 
-    private Room(Long id, Long userId, RoomTitle title, int participant, RoomCapacity capacity, LocalDateTime createdAt) {
+    private Room(Long id, Long userId, RoomTitle title, int participant, RoomCapacity capacity,
+            LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.title = title;
