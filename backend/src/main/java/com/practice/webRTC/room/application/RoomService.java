@@ -6,8 +6,6 @@ import com.practice.webRTC.room.domain.RoomUser;
 import com.practice.webRTC.room.domain.repository.RoomParticipantRepository;
 import com.practice.webRTC.room.domain.repository.RoomRepository;
 import com.practice.webRTC.room.domain.repository.RoomUserRepository;
-import com.practice.webRTC.user.domain.User;
-import com.practice.webRTC.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +33,8 @@ public class RoomService {
         return savedRoom;
     }
 
-    // 방에 가입
+    // 방에 가입 (방에 입장할 자격을 얻는 행위)
+    // 실시간 성 입장 (enter)와는 다름
     @Transactional
     public void joinRoom(Long userId, Long roomId) {
         boolean alreadyJoined = roomUserRepository.existByUserIdAndRoomId(userId, roomId);

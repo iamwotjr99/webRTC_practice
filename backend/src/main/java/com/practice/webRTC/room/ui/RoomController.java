@@ -46,20 +46,24 @@ public class RoomController {
 
     // 내가 가입한 모든 방 조회
     @GetMapping("/my")
-    public ResponseEntity<ApiResponse<List<Room>>> getMyRoomList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<ApiResponse<List<RoomListResDto>>> getMyRoomList(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.id();
 
-        List<Room> result = roomService.getMyRoomList(userId);
-        
+        List<Room> roomList = roomService.getMyRoomList(userId);
+        List<RoomListResDto> result = roomList.stream()
+                .map(room -> RoomListResDto.from(room)).toList();
+
         return ResponseFactory.ok("가입한 모든 방 조회 성공", result);
     }
     
     // 내가 최근에 들어간 방 조회 (5건)
     @GetMapping("/my/recent")
-    public ResponseEntity<ApiResponse<List<Room>>> getTop5MyRoomListByJoinedAt(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<ApiResponse<List<RoomListResDto>>> getTop5MyRoomListByJoinedAt(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.id();
 
-        List<Room> result = roomService.getMyRoomListByJoinedAt(userId);
+        List<Room> roomList = roomService.getMyRoomListByJoinedAt(userId);
+        List<RoomListResDto> result = roomList.stream()
+                .map(room -> RoomListResDto.from(room)).toList();
 
         return ResponseFactory.ok("최근에 들어간 방 조회 성공", result);
     }

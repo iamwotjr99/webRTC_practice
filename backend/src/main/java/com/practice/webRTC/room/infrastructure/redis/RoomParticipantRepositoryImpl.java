@@ -13,8 +13,8 @@ public class RoomParticipantRepositoryImpl implements RoomParticipantRepository 
 
     @Override
     public int getParticipantCount(Long roomId) {
-        String countStr = redisTemplate.opsForValue().get("room:participant:" + roomId);
-        return Integer.parseInt(countStr);
+        String count = redisTemplate.opsForValue().get("room:participant:" + roomId);
+        return count == null ? 0 : Integer.parseInt(count);
     }
 
     @Override
