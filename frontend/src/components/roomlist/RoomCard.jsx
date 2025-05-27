@@ -1,6 +1,9 @@
-import { Link } from "react-router";
+import { useNavigate } from "react-router";
+import Button from "../common/Button";
 
 export default function RoomCard({ room }) {
+    const navigate = useNavigate();
+
     return (
         <article className="bg-white p-4 rounded shadow flex items-center justify-between">
             <div>
@@ -9,10 +12,11 @@ export default function RoomCard({ room }) {
                     {room.participant} / {room.capacity}명 참여중
                 </p>
             </div>
-            <Link to={`chatroom/${room.id}`}
+            <Button
+                onClick={() => navigate(`/chatroom/${room.roomId}`)}
                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 font-semibold transition">
                     참여하기
-            </Link>
+            </Button>
         </article>
     )
 }

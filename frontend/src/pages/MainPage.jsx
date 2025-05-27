@@ -16,6 +16,7 @@ export default function MainPage() {
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
+        console.log(token);
         if (!token) {
             navigate("/login");
             return;
@@ -32,15 +33,7 @@ export default function MainPage() {
         };
 
         fetch();
-    }, [])
-    
-    const dummyRooms = [
-        { id: 1, title: "React 집중 스터디", participants: 3, capacity: 6},
-        { id: 2, title: "백엔드 스터디 방", participants: 2, capacity: 4},
-        { id: 3, title: "정보처리기사 스터디 방", participants: 1, capacity: 3},
-        { id: 4, title: "토익 스터디 방", participants: 3, capacity: 5},
-        { id: 5, title: "심심풀이 땅콩 방", participants: 1, capacity: 2},
-    ]
+    }, []);
 
     return (
         <div className="space-y-5">

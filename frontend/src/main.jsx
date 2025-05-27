@@ -7,11 +7,9 @@ import store from './store/index.js'
 import AppRouter from './routes/AppRouter.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <AppRouter />
-      </BrowserRouter>
-    </Provider>
-  </StrictMode>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
+  </Provider>,
 )

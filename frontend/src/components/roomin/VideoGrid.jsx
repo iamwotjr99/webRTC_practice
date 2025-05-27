@@ -26,10 +26,11 @@ export default function VideoGrid({ users }) {
             {users.map((user) => (
                 <div key={user.id} className={`relative bg-gray-800 rounded-lg overflow-hidden aspect-video shadow-lg ${size.width} ${size.height}`}>
                     <video 
+                        id={`video-${user.id}`}
                         className="w-full h-full object-cover"
                         autoPlay
                         playsInline
-                        muted
+                        muted={user.isMe}
                     />
                     <p className="absolute bottom-2 left-2 text-white text-sm">{user.nickname}</p>
                 </div>

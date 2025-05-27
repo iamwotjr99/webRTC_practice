@@ -15,3 +15,7 @@ export const getMyRoomsRecent = () => {
 export const joinRoom = (roomId) => {
     return instance.post(`api/room/join/${roomId}`)
 }
+
+export const enterRoom = (roomId) => {
+    return instance.post(`/api/room/enter/${roomId}`);
+}
