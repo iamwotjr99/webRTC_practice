@@ -8,42 +8,25 @@ import {
     FaStop,
 } from "react-icons/fa"
 import TooltipButton from "../common/TooltipButton"
-import { useState } from "react"
 import { useNavigate } from "react-router";
 
-export default function BottomBar() {
-    const [isMicOn, setIsMicOn] = useState(false);
-    const [isCamOn, setIsCamOn] = useState(false);
-    const [isScreenSharing, setIsScreenSharing] = useState(false);
+export default function BottomBar({
+    isMicOn,
+    isCamOn,
+    isScreenSharing,
+    onToggleMic,
+    onToggleCam,
+    onShareScreen,
+    leaveRoom,
+    roomId,
+}) {
 
     const navigate = useNavigate();
-
-    const onToggleMic = () => {
-        setIsMicOn((prev) => !prev);
-    }
-
-    const onToggleCam = () => {
-        if (isScreenSharing) {
-            alert("화면 공유중에는 캠을 킬 수 없습니다.");
-            return;
-        }
-        setIsCamOn((prev) => !prev);
-    }
-
-    const onShareScreen = () => {
-        if (isCamOn) {
-            alert("캠을 키는 동안에는 화면 공유를 할 수 없습니다.");
-            return;
-        }
-        setIsScreenSharing((prev) => !prev);
-    }
 
     const onLeave = () => {
         const confirmLeave = window.confirm("정말 나가시곘어요?");
         if (confirmLeave) {
-            setIsMicOn(false);
-            setIsCamOn(false);
-            setIsScreenSharing(false);
+            leaveRoom(roomId);
             navigate("/");
         }
     }
@@ -68,7 +51,7 @@ export default function BottomBar() {
 
             <TooltipButton 
                 icon={isScreenSharing ? <FaStop /> : <FaDesktop />}
-                tooltip={isScreenSharing ? "화면 공유 켜기" : "화면 공유 끄기"}
+                tooltip={isScreenSharing ? "화면 공유 끄기" : "화면 공유 켜기"}
                 onClick={onShareScreen}
                 color="text-white"
                 hoverColor="hover:text-yellow-400"

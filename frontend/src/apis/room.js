@@ -19,3 +19,7 @@ export const joinRoom = (roomId) => {
 export const enterRoom = (roomId) => {
     return instance.post(`/api/room/enter/${roomId}`);
 }
+
+export const leaveRoomApi = (roomId) => {
+    return instance.delete(`/api/room/leave/${roomId}`);
+}

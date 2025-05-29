@@ -15,6 +15,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '/api'),
       },
+      // '/ws-stomp': {
+      //   target: 'http://localhost:8080',
+      //   changeOrigin: true,
+      //   ws: true,
+      // }
     },
   },
   define: {
