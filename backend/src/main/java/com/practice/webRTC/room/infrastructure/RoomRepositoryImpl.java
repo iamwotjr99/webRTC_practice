@@ -7,6 +7,7 @@ import com.practice.webRTC.room.domain.repository.RoomRepository;
 import com.practice.webRTC.room.infrastructure.jpa.JpaRoomRepository;
 import com.practice.webRTC.global.exception.CustomException;
 import com.practice.webRTC.global.exception.ErrorCode;
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

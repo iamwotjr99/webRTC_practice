@@ -14,9 +14,13 @@ public class StompHandshakeInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
             WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+
+        System.out.println("🟢 HandshakeInterceptor: 실행됨");
+
         if (request instanceof ServletServerHttpRequest servletServerHttpRequest) {
             String accessToken = servletServerHttpRequest.getServletRequest()
                     .getParameter("accessToken");
+            System.out.println("accessToken=" + accessToken);
             if (accessToken != null && !accessToken.isEmpty()) {
                 attributes.put("accessToken", accessToken);
             }

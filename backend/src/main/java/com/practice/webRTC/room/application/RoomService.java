@@ -1,6 +1,10 @@
 package com.practice.webRTC.room.application;
 
+import com.practice.webRTC.global.exception.CustomException;
+import com.practice.webRTC.global.exception.ErrorCode;
 import com.practice.webRTC.room.application.dto.CreateRoomReqDto;
+import com.practice.webRTC.room.application.dto.EnterRoomResDto;
+import com.practice.webRTC.room.application.dto.JoinRoomResDto;
 import com.practice.webRTC.room.domain.Room;
 import com.practice.webRTC.room.domain.RoomUser;
 import com.practice.webRTC.room.domain.repository.RoomParticipantRepository;
@@ -8,11 +12,14 @@ import com.practice.webRTC.room.domain.repository.RoomRepository;
 import com.practice.webRTC.room.domain.repository.RoomUserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class RoomService {
 
     private final RoomRepository roomRepository;
@@ -36,29 +43,60 @@ public class RoomService {
     // 방에 가입 (방에 입장할 자격을 얻는 행위)
     // 실시간 성 입장 (enter)와는 다름
     @Transactional
-    public void joinRoom(Long userId, Long roomId) {
+    public JoinRoomResDto joinRoom(Long userId, Long roomId) {
         boolean alreadyJoined = roomUserRepository.existByUserIdAndRoomId(userId, roomId);
+
         Room room = roomRepository.findById(roomId);
 
-        RoomUser roomUser;
-        if (!alreadyJoined && room.canJoin()) {
-            roomUser = RoomUser.join(userId, roomId);
-            room.addParticipant();
-        } else {
-            roomUser = roomUserRepository.findByUserIdAndRoomId(userId, roomId);
+        if (alreadyJoined) {
+            RoomUser roomUser = roomUserRepository.findByUserIdAndRoomId(userId, roomId);
             roomUser.rejoin();
+            roomUserRepository.save(roomUser);
+        } else {
+            if (!room.canJoin()) {
+                throw new CustomException(ErrorCode.ROOM_IS_FULL);
+            }
+
+            RoomUser roomUser = RoomUser.join(userId, roomId);
+            room.addParticipant();
+
+            roomRepository.save(room);
+            roomUserRepository.save(roomUser);
         }
 
-        roomRepository.save(room);
-        roomUserRepository.save(roomUser);
+        return JoinRoomResDto.from(room);
+    }
+
+    // 방 입장
+    public EnterRoomResDto enterRoom(Long userId, Long roomId) {
+        // Redis에 참가자로 등록
+        // 참가자 목록 조회
+        // 자기 자신을 제외한 나머지 참가자 전달
+        roomParticipantRepository.setParticipant(roomId, userId);
+
+        Set<String> allParticipantIds = roomParticipantRepository.getParticipantIds(roomId);
+
+        List<Long> list = allParticipantIds.stream()
+                .map(Long::valueOf)
+                .filter(id -> !id.equals(userId))
+                .toList();
+
+        return EnterRoomResDto.from(userId, list);
+    }
+
+    // 방 퇴장( 완전 퇴장 x )
+    public void leaveRoom(Long userId, Long roomId) {
+        roomParticipantRepository.removeParticipant(roomId, userId);
     }
 
     // 내가 속한 방 목록 조회
     @Transactional
     public List<Room> getMyRoomList(Long userId) {
         List<RoomUser> roomUserList = roomUserRepository.findByUserId(userId);
+
         return roomUserList.stream()
-                .map((roomUser) -> roomRepository.findById(roomUser.getRoomId())).toList();
+                .map((roomUser) ->
+                        roomRepository.findById(roomUser.getRoomId())).toList();
     }
 
     // 최근에 입장한 방 목록 조회
@@ -66,7 +104,11 @@ public class RoomService {
     public List<Room> getMyRoomListByJoinedAt(Long userId) {
         List<RoomUser> roomUserList = roomUserRepository.findByUserIdOrderByJoinedAtDesc(
                 userId);
+
         return roomUserList.stream()
-                .map((roomUser) -> roomRepository.findById(roomUser.getRoomId())).toList();
+                .map(RoomUser::getRoomId)
+                .distinct()
+                .map(roomRepository::findById)
+                .toList();
     }
 }
