@@ -1,6 +1,6 @@
-package com.practice.webRTC.signaling.application.dto;
+package com.practice.webRTC.realtime.signaling.application.dto;
 
-import com.practice.webRTC.signaling.application.SignalType;
+import com.practice.webRTC.realtime.signaling.application.SignalType;
 
 public record SignalingMessageDto(
         Long senderId,

@@ -1,7 +1,7 @@
-package com.practice.webRTC.signaling.ui;
+package com.practice.webRTC.realtime.signaling.ui;
 
-import com.practice.webRTC.signaling.application.SignalingService;
-import com.practice.webRTC.signaling.application.dto.SignalingMessageDto;
+import com.practice.webRTC.realtime.signaling.application.SignalingService;
+import com.practice.webRTC.realtime.signaling.application.dto.SignalingMessageDto;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +23,6 @@ public class SignalingController {
     @MessageMapping("/signal/{roomId}")
     public void signaling(@DestinationVariable Long roomId, @Payload SignalingMessageDto message,
             Message<?> rawMessage) {
-        System.out.println("✅ @MessageMapping 수신 완료");
-        log.info("[시그널 수신] senderId: {}, message: {}", message.senderId(), message);
         SimpMessageHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(rawMessage,
                 SimpMessageHeaderAccessor.class);
 

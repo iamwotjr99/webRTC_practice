@@ -1,9 +1,9 @@
-package com.practice.webRTC.signaling.application;
+package com.practice.webRTC.realtime.signaling.application;
 
 import com.practice.webRTC.auth.infrastructure.jwt.JwtProvider;
 import com.practice.webRTC.global.exception.CustomException;
 import com.practice.webRTC.global.exception.ErrorCode;
-import com.practice.webRTC.signaling.application.dto.SignalingMessageDto;
+import com.practice.webRTC.realtime.signaling.application.dto.SignalingMessageDto;
 import com.practice.webRTC.user.domain.User;
 import com.practice.webRTC.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

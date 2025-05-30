@@ -1,4 +1,4 @@
-package com.practice.webRTC.signaling.application;
+package com.practice.webRTC.realtime.signaling.application;
 
 import lombok.Getter;
 
