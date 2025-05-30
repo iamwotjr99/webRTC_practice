@@ -6,7 +6,7 @@ import { enterRoom, joinRoom } from "../apis/room";
 import RoomHeader from "../components/roomin/RoomHeader";
 import { useSelector } from "react-redux";
 import useWebRTC from "../hooks/useWebRTC";
-import { connectWebSocket } from "../sockets/signaling";
+import { connectWebSocket, publishParticipantUpdate } from "../sockets/signaling";
 
 export default function ChatRoomPage() {
     const { roomId } = useParams();
@@ -50,7 +50,27 @@ export default function ChatRoomPage() {
 
         connectWebSocket(roomId, handleSignal, async () => {
             setIsConnected(true) // WebSocket 연결 완료
-        });
+        }, (receivedIds) => {
+            setParticipants((prev) => {
+                const map = new Map();
+
+                // 기존 참가자 보존
+                prev.forEach((p) => map.set(p.id, p));
+
+                // 새 참가자 반영
+                receivedIds.forEach((id) => {
+                    if (map.has(id)) return;
+
+                    map.set(id, {
+                        id,
+                        nickname: `참가자 ${id}`,
+                        isMe: id === userId,
+                    })
+                });
+                return [...map.values()];
+            })
+        },
+        handleUserLeave);
     }, [userId, roomId, memoizedHandler]);
 
     const hasEnteredRoom = useRef(false);
@@ -69,6 +89,9 @@ export default function ChatRoomPage() {
                 }
 
                 const res = await enterRoom(roomId);
+
+                // 입장 이후 브로드 캐스트
+                publishParticipantUpdate(roomId);
                 const { userId: myId, participants: otherUserIds } = res.data.data;
 
                 // 참가자 상태 갱신
@@ -135,6 +158,10 @@ export default function ChatRoomPage() {
             join();
         }
     }, [roomId, userId])
+
+    const handleUserLeave = useCallback((leaverId) => {
+        setParticipants((prev) => prev.filter((p) => p.id !== leaverId));
+    }, []);
 
     return (
         <>

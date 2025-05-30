@@ -149,7 +149,7 @@ export default function useWebRTC(userId, roomId) {
 
         // ICE 후보 처리
         pc.onicecandidate = (e) => {
-            console.log("onicecandidate 발생", e);
+            // console.log("onicecandidate 발생", e);
             if (e.candidate && e.candidate.candidate) {
                 const { candidate, sdpMid, sdpMLineIndex } = e.candidate;
                 console.log("보내는 ICE candidate: ", { candidate, sdpMid, sdpMLineIndex });
@@ -167,7 +167,7 @@ export default function useWebRTC(userId, roomId) {
         // 트랙 수신 처리
         // 상대방의 스트림이 내 브라우저에 전달될 때 실행
         pc.ontrack = (e) => {
-            console.log("수신된 스트림: ", e.streams);
+            // console.log("수신된 스트림: ", e.streams);
             // console.log("수신된 스트림: ", e.streams[0]);
             const remoteStream = e.streams[0];
 
@@ -199,14 +199,14 @@ export default function useWebRTC(userId, roomId) {
 
         // offer 정보(sdp)를 상대방에게 전송
         sendSignal(roomId, userId, targetId, "OFFER", { sdp: offer.sdp, type: offer.type });
-        console.log("👉 OFFER 보냄", offer.sdp);
+        // console.log("👉 OFFER 보냄", offer.sdp);
     };
 
     // 상대방으로부터 signaling 메시지를 받았을 때 실행
     const handleSignalMessage = async (msg) => {
         if(msg.senderId == userId) return;
 
-        console.log("시그널 수신", msg);
+        // console.log("시그널 수신", msg);
 
         const { senderId, signalType, sdp, candidate, sdpMid, sdpMLineIndex } = msg;
 
@@ -215,7 +215,7 @@ export default function useWebRTC(userId, roomId) {
 
         try {
             if (signalType === "OFFER") {
-                console.log("👉 OFFER 받음", sdp);
+                // console.log("👉 OFFER 받음", sdp);
                 if (!sdp) {
                     console.warn("유효하지 않은 OFFER 수신: sdp 없음");
                     return;
@@ -244,10 +244,10 @@ export default function useWebRTC(userId, roomId) {
                     sdp: answer.sdp,
                     type : answer.type,
                 });
-                console.log("👈 ANSWER 생성", answer.sdp);
+                // console.log("👈 ANSWER 생성", answer.sdp);
 
             } else if (signalType === "ANSWER") {
-                console.log("👉 ANSWER 받음", sdp);
+                // console.log("👉 ANSWER 받음", sdp);
                 if (!sdp) {
                     console.warn("유효하지 않은 ANSWER 수신: sdp 없음");
                     return;
@@ -272,8 +272,8 @@ export default function useWebRTC(userId, roomId) {
                 }
 
             } else if (signalType === "CANDIDATE") {
-                console.log("💠 ICE 수신", candidate);
-                console.log("수신한 ICE candidate", candidate, sdpMid, sdpMLineIndex);
+                // console.log("💠 ICE 수신", candidate);
+                // console.log("수신한 ICE candidate", candidate, sdpMid, sdpMLineIndex);
 
                 if (!candidate || sdpMid == null || sdpMLineIndex == null) {
                     console.warn("ICE candidate 누락", { candidate, sdpMid, sdpMLineIndex });

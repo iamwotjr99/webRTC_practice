@@ -6,7 +6,7 @@ let stompClient = null;
 
 const BASE_URL = "http://localhost:8080";
 
-export const connectWebSocket = (roomId, onSignalReceived, onConnected) => {
+export const connectWebSocket = (roomId, onSignalReceived, onConnected, onParticipantUpdate, onUserLeave) => {
     const accessToken = localStorage.getItem("accessToken");
 
     // 이미 연결돼있으면 중복 연결 방지
@@ -18,14 +18,30 @@ export const connectWebSocket = (roomId, onSignalReceived, onConnected) => {
     stompClient = new Client({
         brokerURL: `ws://localhost:8080/ws-stomp?accessToken=${accessToken}`,
         connectHeaders: {
-            Authorization: `Bearer ${accessToken}`, // 선택
+            Authorization: `Bearer ${accessToken}`,
         },
         onConnect: () => {
+            // 시그널 수신
             stompClient.subscribe(`/sub/signal/${roomId}`, (msg) => {
                 console.log("msg: ", msg);
                 const signal = JSON.parse(msg.body);
                 onSignalReceived(signal);
             })
+
+            // 실시간 참여자 목록 수신
+            stompClient.subscribe(`/sub/room/${roomId}/participants`, (msg) => {
+                const participants = JSON.parse(msg.body);
+                console.log("참여자 업데이트: ", participants);
+                if (onParticipantUpdate) onParticipantUpdate(participants);
+            })
+
+            // 나간 유저 id 수신
+            stompClient.subscribe(`/sub/room/${roomId}/leave`, (msg) => {
+                const leaverId = JSON.parse(msg.body);
+                console.log("유저 퇴장: ", leaverId);
+                if (onUserLeave) onUserLeave(leaverId);
+            });
+
             if (onConnected) onConnected();
         },
         onStompError: (frame) => {
@@ -62,11 +78,31 @@ export const sendSignal = (roomId, userId, targetId, type, data) => {
     });
 };
 
-export const disconnectWebSocket = (roomId) => {
+export const publishParticipantUpdate = (roomId) => {
+    if (!stompClient || !stompClient.connected) {
+        console.warn("Websocket 연결이 안되어있음");
+        return;
+    }
+
+    stompClient.publish({
+        destination: `/pub/room/${roomId}/participants`,
+        body: "",
+    });
+}
+
+export const disconnectWebSocket = async (roomId) => {
     if (stompClient) {
+        await leaveRoomApi(roomId);
+
+        // 방 나갈 때 participant 업데이트를 위한 나가는 유저 id 브로드캐스트
+        stompClient.publish({
+            destination: `/pub/room/${roomId}/leave`,
+            body: "",
+        })
+
         stompClient.deactivate();
         stompClient = null;
-        leaveRoomApi(roomId);
+
         console.log("WebSocket 연결 종료");
     }
 }

@@ -34,7 +34,7 @@ export default function BottomBar({
     return (
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 bg-opacity-80 rounded-full px-6 py-3 flex items-center gap-12 shadow-lg">
             <TooltipButton 
-                icon={isMicOn ? <FaMicrophone /> : <FaMicrophoneSlash />}
+                icon={isMicOn ? <FaMicrophoneSlash /> : <FaMicrophone />}
                 tooltip={isMicOn ? "마이크 끄기" : "마이크 켜기"}
                 onClick={onToggleMic}
                 color="text-white"
@@ -42,7 +42,7 @@ export default function BottomBar({
             />
 
             <TooltipButton 
-                icon={isCamOn ? <FaVideo /> : <FaVideoSlash />}
+                icon={isCamOn ? <FaVideoSlash /> : <FaVideo />}
                 tooltip={isCamOn ? "캠 끄기" : "캠 켜기"}
                 onClick={onToggleCam}
                 color="text-white"
