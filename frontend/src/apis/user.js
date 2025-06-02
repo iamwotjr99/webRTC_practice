@@ -8,4 +8,8 @@ export const checkNicknameApi = (nickname) => {
 
 export const getUserInfo = () => {
     return instance.get("/api/user/me");
+};
+
+export const logoutApi = () => {
+    return instance.delete("/api/user/logout");
 }

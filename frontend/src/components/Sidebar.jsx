@@ -1,11 +1,14 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getMyRoomsRecent } from "../apis/room";
+import { logoutApi } from "../apis/user";
 
 export default function Sidebar() {
     const user = useSelector((state) => state.auth.user);
     const nickname = user?.nickname;
+
+    const navigate = useNavigate();
 
     const [recentRooms, setRecentRooms] = useState([]);
 
@@ -22,6 +25,20 @@ export default function Sidebar() {
 
         fetch();
     }, []);
+
+    const handleLogout = () => {
+        const logout = async () => {
+            try {
+                await logoutApi();
+                localStorage.removeItem("accessToken");
+                navigate("/login");
+            } catch (err) {
+                console.error("로그아웃 요청 실패", err);
+            }
+        }
+
+        logout();
+    }
 
     return (
         <nav className="w-64 h-screen bg-green-800 text-white flex flex-col p-4 fixed left-0 top-0">
@@ -56,7 +73,7 @@ export default function Sidebar() {
             <div className="space-y-2 mt-6">
                 <hr className="border-green-600" />
                 <Link to="/mypage" className="block hover:text-green-300">마이페이지</Link>
-                <button className="hover:text-red-400">로그아웃</button>
+                <button className="hover:text-red-400" onClick={handleLogout}>로그아웃</button>
             </div>
         </nav>
     )
