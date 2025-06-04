@@ -1,4 +1,8 @@
 package com.practice.webRTC.realtime.broadcast.ui.dto;
 
-public class ParticipantsResDto {
+public record ParticipantsResDto(
+        Long id,
+        String nickname
+) {
+
 }

@@ -6,9 +6,9 @@ import lombok.Builder;
 @Builder
 public record EnterRoomResDto(
         Long userId,
-        List<Long> participants
+        List<ParticipantInfo> participants
 ) {
-    public static EnterRoomResDto from(Long userId, List<Long> participants) {
+    public static EnterRoomResDto from(Long userId, List<ParticipantInfo> participants) {
         return EnterRoomResDto.builder()
                 .userId(userId)
                 .participants(participants)

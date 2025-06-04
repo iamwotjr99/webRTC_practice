@@ -6,6 +6,7 @@ import com.practice.webRTC.user.domain.User;
 import com.practice.webRTC.user.domain.entity.UserEntity;
 import com.practice.webRTC.user.domain.repository.UserRepository;
 import com.practice.webRTC.user.infrastructure.jpa.JpaUserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -40,5 +41,13 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean existsByNickname(String nickname) {
         return jpaUserRepository.existsByNicknameEntity_Nickname(nickname);
+    }
+
+    @Override
+    public List<User> findAllById(List<Long> userIds) {
+        return jpaUserRepository.findAllById(userIds)
+                .stream()
+                .map(UserEntity::toUser)
+                .toList();
     }
 }

@@ -5,11 +5,14 @@ import com.practice.webRTC.global.exception.ErrorCode;
 import com.practice.webRTC.room.application.dto.CreateRoomReqDto;
 import com.practice.webRTC.room.application.dto.EnterRoomResDto;
 import com.practice.webRTC.room.application.dto.JoinRoomResDto;
+import com.practice.webRTC.room.application.dto.ParticipantInfo;
 import com.practice.webRTC.room.domain.Room;
 import com.practice.webRTC.room.domain.RoomUser;
 import com.practice.webRTC.room.domain.repository.RoomParticipantRepository;
 import com.practice.webRTC.room.domain.repository.RoomRepository;
 import com.practice.webRTC.room.domain.repository.RoomUserRepository;
+import com.practice.webRTC.user.domain.User;
+import com.practice.webRTC.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +28,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final RoomUserRepository roomUserRepository;
     private final RoomParticipantRepository roomParticipantRepository;
+    private final UserRepository userRepository;
 
     // 방생성하고 자동입장? x
 
@@ -76,12 +80,18 @@ public class RoomService {
 
         Set<String> allParticipantIds = roomParticipantRepository.getParticipantIds(roomId);
 
-        List<Long> list = allParticipantIds.stream()
+        List<Long> otherParticipantIds = allParticipantIds.stream()
                 .map(Long::valueOf)
                 .filter(id -> !id.equals(userId))
                 .toList();
 
-        return EnterRoomResDto.from(userId, list);
+        List<User> otherParticipants = userRepository.findAllById(otherParticipantIds);
+
+        List<ParticipantInfo> participantDtos = otherParticipants.stream()
+                .map(user -> new ParticipantInfo(user.getId(), user.getNicknameValue()))
+                .toList();
+
+        return EnterRoomResDto.from(userId, participantDtos);
     }
 
     // 방 퇴장( 완전 퇴장 x )
