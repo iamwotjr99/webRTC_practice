@@ -1,6 +1,22 @@
 version: '3.8'
 
 services:
+    backend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: webrtc-backend
+        ports:
+            -   "8080:8080"
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/web_rtc
+            SPRING_DATASOURCE_USERNAME: devuser
+            SPRING_DATASOURCE_PASSWORD: devpass
+            SPRING_REDIS_HOST: redis
+            SPRING_REDIS_PORT: 6379
+        depends_on:
+            - mysql
+            - redis
     mysql:
         image: mysql:8.0
         container_name: webrtc-mysql
