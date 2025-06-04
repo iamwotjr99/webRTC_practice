@@ -1,5 +1,7 @@
 export default function VideoGrid({ users }) {
 
+    console.log("In VideoGrid: ", users);
+
     const getGirdCols = (count) => {
         if (count == 1) return "grid-cols-1";
         if (count <= 2) return "grid-cols-2";

@@ -50,21 +50,23 @@ export default function ChatRoomPage() {
 
         connectWebSocket(roomId, handleSignal, async () => {
             setIsConnected(true) // WebSocket 연결 완료
-        }, (receivedIds) => {
+        }, (receivedUsers) => {
             setParticipants((prev) => {
+                console.log("receivedIds: ", receivedUsers);
                 const map = new Map();
 
                 // 기존 참가자 보존
                 prev.forEach((p) => map.set(p.id, p));
 
                 // 새 참가자 반영
-                receivedIds.forEach((id) => {
-                    if (map.has(id)) return;
+                receivedUsers.forEach((u) => {
+                    console.log("users: ",  u);
+                    if (map.has(u.id)) return;
 
-                    map.set(id, {
-                        id,
-                        nickname: `참가자 ${id}`,
-                        isMe: id === userId,
+                    map.set(u.id, {
+                        id: u.id,
+                        nickname: u.nickname,
+                        isMe: u.id === userId,
                     })
                 });
                 return [...map.values()];
@@ -92,14 +94,16 @@ export default function ChatRoomPage() {
 
                 // 입장 이후 브로드 캐스트
                 publishParticipantUpdate(roomId);
-                const { userId: myId, participants: otherUserIds } = res.data.data;
+                const { userId: myId, participants: otherUsers } = res.data.data;
+
+                console.log("otherUsers: ", otherUsers);
 
                 // 참가자 상태 갱신
                 const newParticipants = [
                     { id: myId, nickname, isMe: true },
-                    ...otherUserIds.map((id) => ({
-                        id,
-                        nickname: `참가자 ${id}`,
+                    ...otherUsers.map((u) => ({
+                        id: u.id,
+                        nickname: u.nickname,
                         isMe: false,
                     })),
                 ];
@@ -108,9 +112,10 @@ export default function ChatRoomPage() {
                 setParticipants(newParticipants);
 
                 // 연결된 유저에게 offer 전송
-                otherUserIds.forEach((targetId) => {
+                otherUsers.forEach((user) => {
+                    console.log(user);
                     // 너무 빠르면 실패 가능성 있음, 약간 딜레이
-                    setTimeout(() => createAndSendOffer(targetId), 300);
+                    setTimeout(() => createAndSendOffer(user.id), 300);
                 });
 
                 hasEnteredRoom.current = true;
