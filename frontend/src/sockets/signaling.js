@@ -16,7 +16,7 @@ export const connectWebSocket = (roomId, onSignalReceived, onConnected, onPartic
     }
 
     stompClient = new Client({
-        brokerURL: `ws://localhost:8080/ws-stomp?accessToken=${accessToken}`,
+        brokerURL: `ws://20.41.106.213:8080/ws-stomp?accessToken=${accessToken}`,
         connectHeaders: {
             Authorization: `Bearer ${accessToken}`,
         },
